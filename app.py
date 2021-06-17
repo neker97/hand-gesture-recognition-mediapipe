@@ -16,6 +16,23 @@ from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
 
+from pyautogui import *
+import pyautogui
+import time
+import win32api, win32con
+from win32api import GetSystemMetrics
+
+myWidth = GetSystemMetrics(0)
+myHeight = GetSystemMetrics(1)
+
+ #mie variabili
+bufferMousePositionX=[]
+bufferMousePositionY=[]
+sizeBufferMousePosition = 15
+
+miniScreenH = 500
+miniScreenW = 950
+
 def get_args():
     parser = argparse.ArgumentParser()
 
@@ -39,6 +56,7 @@ def get_args():
 
 
 def main():
+   
     # Argument parsing #################################################################
     args = get_args()
 
@@ -143,6 +161,7 @@ def main():
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
                 if hand_sign_id == 2:  # Point gesture
                     point_history.append(landmark_list[8])
+                    #print("marco:"+str(landmark_list[8]))
                 else:
                     point_history.append([0, 0])
 
@@ -237,7 +256,7 @@ def pre_process_landmark(landmark_list):
         if index == 0:
             base_x, base_y = landmark_point[0], landmark_point[1]
          #   print(str(base_x)+" "+str(base_y))
-            coordinate(base_x,base_y)#roba mia delle coordinate
+          
 
         temp_landmark_list[index][0] = temp_landmark_list[index][0] - base_x
         temp_landmark_list[index][1] = temp_landmark_list[index][1] - base_y
@@ -521,6 +540,7 @@ def draw_point_history(image, point_history):
         if point[0] != 0 and point[1] != 0:
             cv.circle(image, (point[0], point[1]), 1 + int(index / 2),
                       (152, 251, 152), 2)
+            coordinate(point[0],point[1])
 
     return image
 
@@ -548,6 +568,28 @@ def gestureMia(gesture):
 
 def coordinate(x,y):
     print(str(x)+","+str(y))
+    if len(bufferMousePositionX) > sizeBufferMousePosition:
+        bufferMousePositionX.pop(0)
+        bufferMousePositionY.pop(0)
+    bufferMousePositionX.append(x)
+    bufferMousePositionY.append(y)
+    x , y = scalePoint(media(bufferMousePositionX),media(bufferMousePositionY))
+    win32api.SetCursorPos((x,y))
+    
+    
+   
+    
+def click(x,y):
+    win32api.SetCursorPos((x,y))
+    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
+    time.sleep(0.01) #This pauses the script for 0.01 seconds
+    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
+
+def media(l):
+    return int(sum(l)/len(l))
+
+def scalePoint(x,y):
+    return int(((x/miniScreenW)*myWidth)),int(((y/miniScreenH)*myHeight))
 
 if __name__ == '__main__':
     main()
