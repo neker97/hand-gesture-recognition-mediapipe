@@ -26,10 +26,12 @@ myWidth = GetSystemMetrics(0)
 myHeight = GetSystemMetrics(1)
 
  #mie variabili
+ #buffer e size di quest'ultimi per evitatare lo sfarfallio del cursore
 bufferMousePositionX=[]
 bufferMousePositionY=[]
 sizeBufferMousePosition = 15
 
+#dimensioni mini schermo dove viene aperta 
 miniScreenH = 500
 miniScreenW = 950
 
@@ -563,23 +565,26 @@ def draw_info(image, fps, mode, number):
     return image
 
 
+#funzione per gesitire le gesture passate
 def gestureMia(gesture):
     print(gesture)
 
+
+#coordinate del puntatoooore
 def coordinate(x,y):
     print(str(x)+","+str(y))
-    if len(bufferMousePositionX) > sizeBufferMousePosition:
+    if len(bufferMousePositionX) > sizeBufferMousePosition:#se il buffer e' pieno tolgo l'elemento in prima posizione
         bufferMousePositionX.pop(0)
         bufferMousePositionY.pop(0)
-    bufferMousePositionX.append(x)
+    bufferMousePositionX.append(x)#inserisco l'elemento in coda
     bufferMousePositionY.append(y)
-    x , y = scalePoint(media(bufferMousePositionX),media(bufferMousePositionY))
-    win32api.SetCursorPos((x,y))
+    x , y = scalePoint(media(bufferMousePositionX),media(bufferMousePositionY))#faccio la media e la scalo in base alla risoluzione
+    win32api.SetCursorPos((x,y)) #muovo il cursore nelle coordinate specificate
     
     
    
     
-def click(x,y):
+def click(x,y):#click del mouse
     win32api.SetCursorPos((x,y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
     time.sleep(0.01) #This pauses the script for 0.01 seconds
@@ -588,7 +593,7 @@ def click(x,y):
 def media(l):
     return int(sum(l)/len(l))
 
-def scalePoint(x,y):
+def scalePoint(x,y):#scalo il cursore in base alla risoluzione con il rapporto
     return int(((x/miniScreenW)*myWidth)),int(((y/miniScreenH)*myHeight))
 
 if __name__ == '__main__':
