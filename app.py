@@ -236,6 +236,8 @@ def pre_process_landmark(landmark_list):
     for index, landmark_point in enumerate(temp_landmark_list):
         if index == 0:
             base_x, base_y = landmark_point[0], landmark_point[1]
+         #   print(str(base_x)+" "+str(base_y))
+            coordinate(base_x,base_y)#roba mia delle coordinate
 
         temp_landmark_list[index][0] = temp_landmark_list[index][0] - base_x
         temp_landmark_list[index][1] = temp_landmark_list[index][1] - base_y
@@ -499,6 +501,8 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
     info_text = handedness.classification[0].label[0:]
     if hand_sign_text != "":
         info_text = info_text + ':' + hand_sign_text
+      #  print(info_text)#etichetta e tutto
+        gestureMia(hand_sign_text)#roba mia
     cv.putText(image, info_text, (brect[0] + 5, brect[1] - 4),
                cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv.LINE_AA)
 
@@ -538,6 +542,12 @@ def draw_info(image, fps, mode, number):
                        cv.LINE_AA)
     return image
 
+
+def gestureMia(gesture):
+    print(gesture)
+
+def coordinate(x,y):
+    print(str(x)+","+str(y))
 
 if __name__ == '__main__':
     main()
