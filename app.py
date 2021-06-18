@@ -33,7 +33,7 @@ sizeBufferMousePosition = 15
 
 #dimensioni mini schermo dove viene aperta 
 miniScreenH = 500
-miniScreenW = 950
+miniScreenW = 960
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -65,7 +65,10 @@ def main():
     cap_device = args.device
     cap_width = args.width
     cap_height = args.height
-
+    
+    
+    
+    print ("a: "+str(miniScreenH)+" "+str(miniScreenW))
     use_static_image_mode = args.use_static_image_mode
     min_detection_confidence = args.min_detection_confidence
     min_tracking_confidence = args.min_tracking_confidence
@@ -217,7 +220,13 @@ def select_mode(key, mode):
 
 def calc_bounding_rect(image, landmarks):
     image_width, image_height = image.shape[1], image.shape[0]
-
+    
+    global miniScreenH
+    global miniScreenW
+    
+    miniScreenH = int((image_height/3)*2)
+    miniScreenW = image_width
+    
     landmark_array = np.empty((0, 2), int)
 
     for _, landmark in enumerate(landmarks.landmark):
@@ -595,6 +604,7 @@ def media(l):
 
 def scalePoint(x,y):#scalo il cursore in base alla risoluzione con il rapporto
     return int(((x/miniScreenW)*myWidth)),int(((y/miniScreenH)*myHeight))
+
 
 if __name__ == '__main__':
     main()
