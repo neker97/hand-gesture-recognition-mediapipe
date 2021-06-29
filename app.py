@@ -68,7 +68,7 @@ def main():
     
     
     
-    print ("a: "+str(miniScreenH)+" "+str(miniScreenW))
+    #print ("a: "+str(miniScreenH)+" "+str(miniScreenW))
     use_static_image_mode = args.use_static_image_mode
     min_detection_confidence = args.min_detection_confidence
     min_tracking_confidence = args.min_tracking_confidence
@@ -576,12 +576,13 @@ def draw_info(image, fps, mode, number):
 
 #funzione per gesitire le gesture passate
 def gestureMia(gesture):
-    print(gesture)
+   # print(gesture)
+   a = 0
 
 
 #coordinate del puntatoooore
 def coordinate(x,y):
-    print(str(x)+","+str(y))
+  #  print(str(x)+","+str(y))
     if len(bufferMousePositionX) > sizeBufferMousePosition:#se il buffer e' pieno tolgo l'elemento in prima posizione
         bufferMousePositionX.pop(0)
         bufferMousePositionY.pop(0)
