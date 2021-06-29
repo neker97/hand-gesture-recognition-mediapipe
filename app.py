@@ -614,9 +614,16 @@ def fingerGestureMia(gesture):
    global cooy
    velox = 30
    if(gesture == "Scroll Down"):
-       scrollDown(coox,cooy,-velox)#-velox fa lo scroll down
+       scrollUpDown(coox,cooy,-velox)#-velox of scroll down
    if(gesture == "Scroll Up"):
-       scrollDown(coox,cooy,velox)#velox fa lo scroll up
+       scrollUpDown(coox,cooy,velox)#velox of scroll up
+   if(gesture == "Clockwise"):
+      scrollRightLeft(coox,cooy,velox)#velox of scroll right
+   if(gesture == "Counter Clockwise"):
+       scrollRightLeft(coox,cooy,-velox)#velox of scroll left
+      
+       
+       
     
     
     
@@ -637,8 +644,11 @@ def scalePoint(x,y):#scalo il cursore in base alla risoluzione con il rapporto
     return int(((x/miniScreenW)*myWidth)),int(((y/miniScreenH)*myHeight))
 
 
-def scrollDown(x,y,downUp):
+def scrollUpDown(x,y,downUp):
     win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, x, y, downUp, 0)
+
+def scrollRightLeft(x,y,rightLeft):
+    win32api.mouse_event(win32con.MOUSEEVENTF_HWHEEL, x, y, rightLeft, 0)
     
 
 if __name__ == '__main__':
