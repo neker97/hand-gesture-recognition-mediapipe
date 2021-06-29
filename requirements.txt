@@ -1,0 +1,3 @@
+pyinput
+pyautogui
+pyAudio
