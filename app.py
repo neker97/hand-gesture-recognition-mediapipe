@@ -35,6 +35,8 @@ sizeBufferMousePosition = 15
 miniScreenH = 500
 miniScreenW = 960
 
+
+
 def get_args():
     parser = argparse.ArgumentParser()
 
@@ -574,10 +576,17 @@ def draw_info(image, fps, mode, number):
     return image
 
 
+wasClicked = False
 #funzione per gesitire le gesture passate
 def gestureMia(gesture):
    # print(gesture)
-   a = 0
+   global wasClicked
+   if(gesture == "Click" and not wasClicked):
+        wasClicked = True
+        click()
+   elif (gesture != "Click"):
+       wasClicked = False
+       
 
 
 #coordinate del puntatoooore
@@ -594,11 +603,13 @@ def coordinate(x,y):
     
    
     
-def click(x,y):#click del mouse
-    win32api.SetCursorPos((x,y))
+def click():#click del mouse
+    #win32api.SetCursorPos((x,y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
     time.sleep(0.01) #This pauses the script for 0.01 seconds
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
+    
+    
 
 def media(l):
     return int(sum(l)/len(l))
