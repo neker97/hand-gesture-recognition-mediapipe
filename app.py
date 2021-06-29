@@ -544,7 +544,7 @@ def draw_info_text(image, brect, handedness, hand_sign_text,
         cv.putText(image, "Finger Gesture:" + finger_gesture_text, (10, 60),
                    cv.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2,
                    cv.LINE_AA)
-
+        fingerGestureMia(finger_gesture_text)
     return image
 
 
@@ -577,6 +577,8 @@ def draw_info(image, fps, mode, number):
 
 
 wasClicked = False
+coox = 0#coordinata x del mouse
+cooy = 0#coordinata y del mouse
 #funzione per gesitire le gesture passate
 def gestureMia(gesture):
    # print(gesture)
@@ -586,11 +588,18 @@ def gestureMia(gesture):
         click()
    elif (gesture != "Click"):
        wasClicked = False
+   
+       
+
        
 
 
 #coordinate del puntatoooore
 def coordinate(x,y):
+    global coox
+    global cooy
+    coox = x
+    cooy = y
   #  print(str(x)+","+str(y))
     if len(bufferMousePositionX) > sizeBufferMousePosition:#se il buffer e' pieno tolgo l'elemento in prima posizione
         bufferMousePositionX.pop(0)
@@ -599,6 +608,16 @@ def coordinate(x,y):
     bufferMousePositionY.append(y)
     x , y = scalePoint(media(bufferMousePositionX),media(bufferMousePositionY))#faccio la media e la scalo in base alla risoluzione
     win32api.SetCursorPos((x,y)) #muovo il cursore nelle coordinate specificate
+
+def fingerGestureMia(gesture):
+   global coox 
+   global cooy
+   velox = 30
+   if(gesture == "Scroll Down"):
+       scrollDown(coox,cooy,-velox)#-velox fa lo scroll down
+   if(gesture == "Scroll Up"):
+       scrollDown(coox,cooy,velox)#velox fa lo scroll up
+    
     
     
    
@@ -617,6 +636,10 @@ def media(l):
 def scalePoint(x,y):#scalo il cursore in base alla risoluzione con il rapporto
     return int(((x/miniScreenW)*myWidth)),int(((y/miniScreenH)*myHeight))
 
+
+def scrollDown(x,y,downUp):
+    win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, x, y, downUp, 0)
+    
 
 if __name__ == '__main__':
     main()
