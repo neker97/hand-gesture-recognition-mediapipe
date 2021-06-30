@@ -583,10 +583,10 @@ cooy = 0#coordinata y del mouse
 def gestureMia(gesture):
    # print(gesture)
    global wasClicked
-   if(gesture == "Click" and not wasClicked):
+   if((gesture == "Click" or gesture == "Open" )and not wasClicked):
         wasClicked = True
         click()
-   elif (gesture != "Click"):
+   elif (gesture != "Click" and gesture != "Open"):
        wasClicked = False
    
        
