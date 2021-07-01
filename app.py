@@ -587,6 +587,7 @@ cooy = 0#coordinata y del mouse
 def gestureMia(gesture):
    # print(gesture)
     global wasClicked
+    velox = 30
     if((gesture == "Click" or gesture == "Open")and not wasClicked):
        wasClicked = True
        click()
@@ -596,6 +597,11 @@ def gestureMia(gesture):
     if gesture == "Close":
         key2.press(Key.backspace)
         key2.release(Key.backspace)
+        a = 0
+    if gesture == "Scroll Up":
+        scrollUpDown(coox,cooy,velox)#velox of scroll up
+    if gesture == "Scroll Down":
+        scrollUpDown(coox,cooy,-velox)#velox of scroll up
 
 
 
@@ -619,10 +625,6 @@ def fingerGestureMia(gesture):
    global coox
    global cooy
    velox = 30
-   if(gesture == "Scroll Down"):
-       scrollUpDown(coox,cooy,-velox)#-velox of scroll down
-   if(gesture == "Scroll Up"):
-       scrollUpDown(coox,cooy,velox)#velox of scroll up
    if(gesture == "Clockwise"):
       scrollRightLeft(coox,cooy,velox)#velox of scroll right
    if(gesture == "Counter Clockwise"):
@@ -662,3 +664,4 @@ def scrollRightLeft(x,y,rightLeft):
 
 if __name__ == '__main__':
     main()
+
