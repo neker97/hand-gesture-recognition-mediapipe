@@ -40,6 +40,7 @@ miniScreenH = 500
 miniScreenW = 960
 
 key2 = Controller()
+src = SpeechRecognController()
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -584,24 +585,36 @@ wasClicked = False
 coox = 0#coordinata x del mouse
 cooy = 0#coordinata y del mouse
 #funzione per gesitire le gesture passate
+openHand = False
 def gestureMia(gesture):
    # print(gesture)
     global wasClicked
+    global src
+    global openHand
+
     velox = 30
-   
-    if((gesture == "Click" or gesture == "Open")and not wasClicked):
+
+    if gesture == "Click" and not wasClicked:
        wasClicked = True
        click()
-    elif (gesture != "Click" and gesture != "Open"):
-       wasClicked = False 
+    elif gesture != "Click":
+       wasClicked = False
     if gesture == "Close":
         key2.press(Key.backspace)
         key2.release(Key.backspace)
-        a = 0
     if gesture == "Scroll Up":
         scrollUpDown(coox,cooy,velox)#velox of scroll up
     if gesture == "Scroll Down":
         scrollUpDown(coox,cooy,-velox)#velox of scroll up
+
+    if gesture == "Open" and not openHand:
+        openHand = True
+        src.listen()
+    elif gesture != "Open" and openHand:
+        src.stop()
+        openHand = False
+
+
 
 
 
@@ -631,21 +644,11 @@ def fingerGestureMia(gesture):
        scrollRightLeft(coox,cooy,-velox)#velox of scroll left
 
 
-
-
-
-
-src = SpeechRecognController()
-
 def click():#click del mouse
     #win32api.SetCursorPos((x,y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
     time.sleep(0.01) #This pauses the script for 0.01 seconds
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
-    global src
-    src.listen()
-    t = Timer(10, src.stop)
-    t.start()
 
 
 def media(l):
@@ -664,4 +667,3 @@ def scrollRightLeft(x,y,rightLeft):
 
 if __name__ == '__main__':
     main()
-
