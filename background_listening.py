@@ -2,6 +2,7 @@ import time
 import speech_recognition as sr
 import asyncio
 from pynput.keyboard import Key, Controller
+import traceback
 
 class SpeechRecognController:
     def __init__(self):
@@ -10,8 +11,8 @@ class SpeechRecognController:
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
         self.stop_listening = None;
-        self.r.dynamic_energy_threshold = True
         self.callback2 = None
+        self.listening = False
         with self.m as source:
             self.r.adjust_for_ambient_noise(source)
         print("SRC: Initialization finished!")
@@ -25,20 +26,22 @@ class SpeechRecognController:
             print("SCR: Could not request results from Google Speech Recognition service; {0}".format(e))
 
     def stop(self):
+        #print(self.r.energy_threshold)
+        if not self.listening:
+            return
         self.stop_listening(wait_for_stop=False);
+        self.listening = False
         print("SRC: Stop Listening")
 
-    def listen(self, callback2 = None, timeStop = False):
+    def listen(self, callback2 = None):
+        if self.listening:
+            return
         if callback2 is None:
             self.callback2 = self.keyboard.type
         else:
             self.callback2 = callback2
+        self.m = sr.Microphone()
         self.stop_listening = self.r.listen_in_background(self.m, self.callback)
+        self.r.energy_threshold = 10.0
+        self.listening = True
         print("SRC: Listening")
-        if timeStop:
-            asyncio.run(self.stopTime(timeStop))
-
-
-    async def stopTime(self, seconds):
-        await asyncio.sleep(seconds)
-        self.stop()
