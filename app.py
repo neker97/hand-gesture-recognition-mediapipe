@@ -21,6 +21,10 @@ import pyautogui
 import time
 import win32api, win32con
 from win32api import GetSystemMetrics
+from background_listening import *
+from threading import Timer
+from pynput.keyboard import Key, Controller
+
 
 myWidth = GetSystemMetrics(0)
 myHeight = GetSystemMetrics(1)
@@ -31,11 +35,11 @@ bufferMousePositionX=[]
 bufferMousePositionY=[]
 sizeBufferMousePosition = 15
 
-#dimensioni mini schermo dove viene aperta 
+#dimensioni mini schermo dove viene aperta
 miniScreenH = 500
 miniScreenW = 960
 
-
+key2 = Controller()
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -60,16 +64,16 @@ def get_args():
 
 
 def main():
-   
+
     # Argument parsing #################################################################
     args = get_args()
 
     cap_device = args.device
     cap_width = args.width
     cap_height = args.height
-    
-    
-    
+
+
+
     #print ("a: "+str(miniScreenH)+" "+str(miniScreenW))
     use_static_image_mode = args.use_static_image_mode
     min_detection_confidence = args.min_detection_confidence
@@ -222,13 +226,13 @@ def select_mode(key, mode):
 
 def calc_bounding_rect(image, landmarks):
     image_width, image_height = image.shape[1], image.shape[0]
-    
+
     global miniScreenH
     global miniScreenW
-    
+
     miniScreenH = int((image_height/3)*2)
     miniScreenW = image_width
-    
+
     landmark_array = np.empty((0, 2), int)
 
     for _, landmark in enumerate(landmarks.landmark):
@@ -269,7 +273,7 @@ def pre_process_landmark(landmark_list):
         if index == 0:
             base_x, base_y = landmark_point[0], landmark_point[1]
          #   print(str(base_x)+" "+str(base_y))
-          
+
 
         temp_landmark_list[index][0] = temp_landmark_list[index][0] - base_x
         temp_landmark_list[index][1] = temp_landmark_list[index][1] - base_y
@@ -582,16 +586,18 @@ cooy = 0#coordinata y del mouse
 #funzione per gesitire le gesture passate
 def gestureMia(gesture):
    # print(gesture)
-   global wasClicked
-   if((gesture == "Click" or gesture == "Open" )and not wasClicked):
-        wasClicked = True
-        click()
-   elif (gesture != "Click" and gesture != "Open"):
+    global wasClicked
+    if((gesture == "Click" or gesture == "Open")and not wasClicked):
+       wasClicked = True
+       click()
+    elif (gesture != "Click" and gesture != "Open"):
        wasClicked = False
-   
-       
 
-       
+    if gesture == "Close":
+        key2.press(Key.backspace)
+        key2.release(Key.backspace)
+
+
 
 
 #coordinate del puntatoooore
@@ -610,7 +616,7 @@ def coordinate(x,y):
     win32api.SetCursorPos((x,y)) #muovo il cursore nelle coordinate specificate
 
 def fingerGestureMia(gesture):
-   global coox 
+   global coox
    global cooy
    velox = 30
    if(gesture == "Scroll Down"):
@@ -621,21 +627,24 @@ def fingerGestureMia(gesture):
       scrollRightLeft(coox,cooy,velox)#velox of scroll right
    if(gesture == "Counter Clockwise"):
        scrollRightLeft(coox,cooy,-velox)#velox of scroll left
-      
-       
-       
-    
-    
-    
-   
-    
+
+
+
+
+
+
+src = SpeechRecognController()
+
 def click():#click del mouse
     #win32api.SetCursorPos((x,y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
     time.sleep(0.01) #This pauses the script for 0.01 seconds
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
-    
-    
+    global src
+    src.listen()
+    t = Timer(10, src.stop)
+    t.start()
+
 
 def media(l):
     return int(sum(l)/len(l))
@@ -649,7 +658,7 @@ def scrollUpDown(x,y,downUp):
 
 def scrollRightLeft(x,y,rightLeft):
     win32api.mouse_event(win32con.MOUSEEVENTF_HWHEEL, x, y, rightLeft, 0)
-    
+
 
 if __name__ == '__main__':
     main()
