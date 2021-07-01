@@ -1,9 +1,11 @@
 import time
 import speech_recognition as sr
 import asyncio
-from pynput.keyboard import Key, Controller
+from pynput.keyboard import Controller
 import traceback
 
+
+#print(sr.Microphone.list_microphone_names())
 class SpeechRecognController:
     def __init__(self):
         print("SRC: Initialization started!")
@@ -34,6 +36,7 @@ class SpeechRecognController:
         print("SRC: Stop Listening")
 
     def listen(self, callback2 = None):
+        
         if self.listening:
             return
         if callback2 is None:
@@ -42,6 +45,8 @@ class SpeechRecognController:
             self.callback2 = callback2
         self.m = sr.Microphone()
         self.stop_listening = self.r.listen_in_background(self.m, self.callback)
-        self.r.energy_threshold = 10.0
+      #  self.r.energy_threshold = 10.0
         self.listening = True
         print("SRC: Listening")
+        
+

@@ -588,12 +588,12 @@ def gestureMia(gesture):
    # print(gesture)
     global wasClicked
     velox = 30
+   
     if((gesture == "Click" or gesture == "Open")and not wasClicked):
        wasClicked = True
        click()
     elif (gesture != "Click" and gesture != "Open"):
-       wasClicked = False
-
+       wasClicked = False 
     if gesture == "Close":
         key2.press(Key.backspace)
         key2.release(Key.backspace)
