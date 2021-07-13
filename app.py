@@ -619,13 +619,12 @@ def gestureMia(gesture):
 
 
 
-#coordinate del puntatoooore
+#coordinate del puntatore
 def coordinate(x,y):
     global coox
     global cooy
     coox = x
     cooy = y
-  #  print(str(x)+","+str(y))
     if len(bufferMousePositionX) > sizeBufferMousePosition:#se il buffer e' pieno tolgo l'elemento in prima posizione
         bufferMousePositionX.pop(0)
         bufferMousePositionY.pop(0)
@@ -645,7 +644,6 @@ def fingerGestureMia(gesture):
 
 
 def click():#click del mouse
-    #win32api.SetCursorPos((x,y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
     time.sleep(0.01) #This pauses the script for 0.01 seconds
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
